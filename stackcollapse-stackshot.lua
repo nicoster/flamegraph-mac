@@ -130,10 +130,17 @@ local function process_kcobjects(objs)
 end
 
 local function main()
+    print('size:' .. #arg, ins(arg))
+    if #arg ~= 1 then
+        print('Usage: ' .. arg[0] .. ' <stackshot-file>')
+        return 1
+    end
 
+    local workdir = string.match(arg[1], '^([^.]+)%.')
+    print('workdir:', workdir)
     for i, val in ipairs(arg) do
         print('file:', val)
-        local f = io.open(val)
+        local f = assert(io.open(val))
         local jsondata = f:read('*a')
         process_kcobjects(json.decode(jsondata))
         f:close()
@@ -141,8 +148,8 @@ local function main()
 
     load_symbols(addrs, symcache)
     for threadid, shots in pairs(stackshots) do
-        local filename = './' .. processid .. 't' .. threadid .. '.folded'
-        local f = io.open(filename, 'w')
+        local filename = workdir .. '/' .. processid .. 't' .. threadid .. '.folded'
+        local f = assert(io.open(filename, 'w'))
         for stackshot, count in pairs(shots) do
             local symbols = {}
             for _, val in ipairs(stackshot) do
