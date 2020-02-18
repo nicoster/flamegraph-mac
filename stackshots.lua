@@ -52,8 +52,16 @@ ffi.cdef [[
         long tv_usec;
     } timeval;
 
-    int gettimeofday(struct timeval* t, void* tzp);    
+    int gettimeofday(struct timeval* t, void* tzp);
+
+    /* signal.h */
+    typedef void (*sig_t) (int);
+    sig_t signal(int sig, sig_t func);
+
 ]]
+
+local SIGINT = 2
+local SIG_ERR = -1
 
 local C = ffi.C
 
@@ -95,19 +103,24 @@ local function parse_args()
     return parser:parse()
 end
 
+-- set when ctrl+break is pressed
+local ctrlc = false
+
 local function main()
     local args = parse_args()
     local f = tonumber(args.freq)
     args.interval = 1000 / (f and f < 50 and f or 50)
     
-    print('args:', ins(args))
+    -- print('args:', ins(args))
+
+    assert(SIG_ERR ~= C.signal(SIGINT, function() ctrlc = true end))
 
     if args.stop then
         print("Press a key to continue ...")
         C.getchar()
     end
 
-    local filename = './pid%' .. args.pid .. '@' .. gettimeofday() .. '.stackshot'
+    local filename = 'pid' .. args.pid .. '_' .. math.floor(gettimeofday()) .. '.stackshot'
     local file = io.open(filename, 'w')
     local stop_run = args.time * 1000 + gettimeofday()
     local count = 0
@@ -130,9 +143,9 @@ local function main()
             -- print('sleep for', remain)
             C.usleep(remain * 1000)
         end
-    until (ends > stop_run)
+    until (ends > stop_run or ctrlc)
     file:close()
-    print("Wrote " .. count .. ' stackshots to ' .. filename)
+    print("\nWrote " .. count .. ' stackshots to ' .. filename)
 end
 
 main()
