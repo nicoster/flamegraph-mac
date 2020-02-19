@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/bin/sh
 
 stackshots=$1
 echo 'fold ' $stackshots

@@ -57,7 +57,8 @@ ffi.cdef [[
     /* signal.h */
     typedef void (*sig_t) (int);
     sig_t signal(int sig, sig_t func);
-
+    int32_t getpid(void);
+    int unlink(const char *path);
 ]]
 
 local SIGINT = 2
@@ -105,6 +106,7 @@ end
 
 -- set when ctrl+break is pressed
 local ctrlc = false
+local pidfilename = 'stackshots.pid'
 
 local function main()
     local args = parse_args()
@@ -119,6 +121,10 @@ local function main()
         print("Press a key to continue ...")
         C.getchar()
     end
+
+    local pidfile = io.open(pidfilename, 'w')
+    pidfile:write(C.getpid())
+    pidfile:close()
 
     local filename = 'pid' .. args.pid .. '_' .. math.floor(gettimeofday()) .. '.stackshot'
     local file = io.open(filename, 'w')
@@ -145,6 +151,7 @@ local function main()
         end
     until (ends > stop_run or ctrlc)
     file:close()
+    C.unlink(pidfilename)
     print("\nWrote " .. count .. ' stackshots to ' .. filename)
 end
 
