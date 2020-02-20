@@ -15,58 +15,7 @@ function string:split(sep)
     return tokens
 end
 
--- local function table_eq(lhs, rhs)
---     print(lhs, rhs)
---     if #lhs ~= #rhs then
---         return false
---     end
---     for i = 1, #lhs do
---         if lhs[i] ~= rhs[i] then
---             return false
---         end
---     end
---     return true
--- end
-
--- local compare_mt = {__eq = table_eq}
--- local deep_cmp_table = setmetatable({},
---     {
---         __call = function(...)
---             return setmetatable({select(2, ...)}, compare_mt)
---         end
---     }
--- )
-
--- local tabkey_meta = {
---     __newindex = function(tab, key, val)
---         rawget(tab, "_store")[key] = val
---     end,
---     __index = function(tab, key)
---         for k, v in pairs(rawget(tab, "_store")) do
---             if table_eq(k, key) then
---                 return v
---             end
---         end
---     end
--- }
-
--- local tabkey_table = setmetatable({}, {
---     __call = function()
---         return setmetatable({_store={}}, tabkey_meta)
---     end
--- })
-
 local function test()
-    -- local t1 = deep_cmp_table(1, 2, 3)
-    -- local t2 = deep_cmp_table(1, 2)
-    -- print(ins(t1), ins(t2))
-    -- print(t1 == t2)
-    -- table.insert(t2, 3)
-    -- print(t1 == t2)
-    -- local a = tabkey_table()
-    -- a[t1] = 2
-    -- a[t2] = 5
-    -- print(ins(a))
 end
 
 local function parse_atos(addr, line)
