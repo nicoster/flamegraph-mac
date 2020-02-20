@@ -1,4 +1,7 @@
-#!/bin/sh -x
+#!/bin/bash 
+
+SCRIPTDIR=$(dirname -- "$(readlink "$BASH_SOURCE" || echo $BASH_SOURCE)")
+# echo SCRIPTDIR: $SCRIPTDIR
 
 pid=$1
 freq=${2:-50}
@@ -10,7 +13,7 @@ function process_stackshots()
         stackshots=`cat stackshots-$pid.out`
         echo $stackshots
         mkdir -p ${stackshots%.*}
-        ./foldstackshots.sh $stackshots
+        $SCRIPTDIR/foldstackshots.sh $stackshots
     fi
 }
 
@@ -23,5 +26,5 @@ function ctrl_c() {
 }
 
 trap ctrl_c INT
-sudo -E ./stackshots.lua $pid -f $freq -t $time
+sudo -E $SCRIPTDIR/stackshots.lua $pid -f $freq -t $time
 process_stackshots
