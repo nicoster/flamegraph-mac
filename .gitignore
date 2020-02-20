@@ -1,2 +1,6 @@
 .DS_Store
 pid*
+*.out
+*.json
+*.tar.gz
+REVISION

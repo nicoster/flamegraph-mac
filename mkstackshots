@@ -2,7 +2,7 @@
 
 pid=$1
 freq=${2:-50}
-time=${3:-10}
+time=${3:-30}
 
 function process_stackshots()
 {
@@ -23,5 +23,5 @@ function ctrl_c() {
 }
 
 trap ctrl_c INT
-sudo -E luajit stackshots.lua $pid -f $freq -t $time
+sudo -E ./stackshots.lua $pid -f $freq -t $time
 process_stackshots

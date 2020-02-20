@@ -1,3 +1,4 @@
+#!/usr/bin/env luajit
 
 local ffi = require 'ffi'
 local argparse = require "argparse"
