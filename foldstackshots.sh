@@ -1,14 +1,26 @@
 #!/bin/sh
 
 stackshots=$1
-echo 'fold ' $stackshots
+echo 'folding ' $stackshots
 basename=${stackshots%.*}
 mkdir -p $basename
+
+function convert_svg()
+{
+    local first
+    for f in `ls -1 $basename/*.folded`; do
+        local svgfile=${f%.*}.svg
+        echo convert $f to $svgfile
+        ./flamegraph.pl $f > $svgfile #&& rm $f
+
+        if [[ "$first" -eq "" ]]; then
+            first=1
+            open $svgfile
+        fi
+    done
+}
+
 /usr/bin/python kcdata.py --multiple $stackshots \
-| sed '1s/^{/\[{/; s/"lr": \([0-9]\{1,\}\)/"lr": "\1"/g; s/^}$/},/g; $s/},$/}\]/; ' > $basename.json \
-&& ./stackcollapse-stackshot.lua $basename.json | tee $basename.fold_result \
-&& for f in `ls -1 $basename`; do
-    echo convert $f to ${f%.*}.svg
-    ./flamegraph.pl $basename/$f > $basename/${f%.*}.svg \
-    && rm $basename/$f
-done
+| sed '1s/^{/\[{/; s/"lr": \([0-9]\{1,\}\)/"lr": "\1"/g; s/^}$/},/g; $s/},$/}\]/; ' > $basename/stackshots.json \
+&& ./stackcollapse-stackshot.lua $basename/stackshots.json | tee $basename/fold.result \
+&& convert_svg

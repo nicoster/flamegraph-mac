@@ -34,14 +34,14 @@ end
 
 local function parse_atos(addr, line)
     local symbol
-    local func, mod, offset = string.match(line, "(.*)%s+%(in%s+([^ ]+)%)%s+%+%s+([^ ]+)")
+    local func, mod, offset = string.match(line, "(.*)%s+%(in%s+([^ ]+)%)%s+(.*)")
     if func and mod and offset then
         if string.match(func, '^0x') then
-            symbol = func .. ' ' .. mod .. '+' .. offset
+            symbol = func .. ' ' .. mod .. offset
         else
-            symbol = mod .. '`' .. func .. '+' .. offset
+            symbol = mod .. '`' .. func .. offset
         end
-    else
+    else 
         symbol = addr
     end
     print(addr, symbol)
@@ -136,7 +136,7 @@ local function main()
         return 1
     end
 
-    local workdir = string.match(arg[1], '^([^.]+)%.')
+    local workdir = string.match(arg[1], '^([^.]+)/')
     print('workdir:', workdir)
     for i, val in ipairs(arg) do
         print('file:', val)

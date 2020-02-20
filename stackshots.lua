@@ -112,6 +112,9 @@ local function main()
     local args = parse_args()
     local f = tonumber(args.freq)
     args.interval = 1000 / (f and f < 50 and f or 50)
+
+    local resultname = 'stackshots-' .. args.pid .. '.out'
+    C.unlink(resultname)
     
     -- print('args:', ins(args))
 
@@ -145,13 +148,15 @@ local function main()
 
         local ends = gettimeofday()
         local remain = args.interval - (ends - start)
-        if remain > 0 then
-            -- print('sleep for', remain)
+        if remain > 0 and not ctrlc then
             C.usleep(remain * 1000)
         end
     until (ends > stop_run or ctrlc)
     file:close()
     C.unlink(pidfilename)
+
+    io.open(resultname, 'w'):write(filename)
+
     print("\nWrote " .. count .. ' stackshots to ' .. filename)
 end
 
