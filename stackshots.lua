@@ -118,6 +118,9 @@ local function main()
     C.unlink(resultname)
     
     -- print('args:', ins(args))
+    print("Capture stackshots on pid of " .. args.pid .. ' with frequency of ' 
+        .. args.freq .. ' for ' .. args.interval .. ' seconds')
+    print("Press ^C to stop capturing prematurely..")
 
     assert(SIG_ERR ~= C.signal(SIGINT, function() ctrlc = true end))
 

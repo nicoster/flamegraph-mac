@@ -31,7 +31,7 @@ local function parse_atos(addr, line)
     else
         symbol = addr
     end
-    print(addr, symbol)
+    -- print(addr, symbol)
     return symbol
 end
 
@@ -122,16 +122,16 @@ local function process_kcobjects(objs)
 end
 
 local function main()
-    print("size:" .. #arg, ins(arg))
+    -- print("size:" .. #arg, ins(arg))
     if #arg ~= 1 then
         print("Usage: " .. arg[0] .. " <stackshot-file>")
         return 1
     end
 
     local workdir = string.match(arg[1], "^([^.]+)/")
-    print("workdir:", workdir)
+    -- print("workdir:", workdir)
     for i, val in ipairs(arg) do
-        print("file:", val)
+        print("file: " .. val)
         local f = assert(io.open(val))
         local jsondata = f:read("*a")
         process_kcobjects(json.decode(jsondata))

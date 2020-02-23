@@ -32,7 +32,6 @@ while getopts ":p:f:t:h" opt; do
 done
 shift $((OPTIND -1))
 
-echo $pid
 
 if [[ "$pid" == "" ]]; then $0 -h; exit 0; fi
 
@@ -45,7 +44,7 @@ function process_stackshots()
 {
     if [[ -f stackshots-$pid.out ]] ; then
         stackshots=`cat stackshots-$pid.out`
-        echo $stackshots
+        # echo $stackshots
         mkdir -p ${stackshots%.*}
         $SCRIPTDIR/foldstackshots.sh $stackshots
     fi

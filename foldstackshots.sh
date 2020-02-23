@@ -5,7 +5,7 @@ SCRIPTDIR=$(dirname -- "$(readlink "$BASH_SOURCE" || echo $BASH_SOURCE)")
 # echo SCRIPTDIR: $SCRIPTDIR
 
 stackshots=$1
-echo 'folding ' $stackshots
+echo folding $stackshots
 basename=${stackshots%.*}
 mkdir -p $basename
 
