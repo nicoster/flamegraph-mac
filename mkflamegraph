@@ -1,0 +1,64 @@
+#!/bin/bash 
+
+SCRIPTDIR=$(dirname -- "$(readlink "$BASH_SOURCE" || echo $BASH_SOURCE)")
+# echo SCRIPTDIR: $SCRIPTDIR
+
+
+while getopts ":p:f:t:h" opt; do
+  case ${opt} in
+    h )
+        echo "Usage: mkflamegraph -p <pid> [-f <freq>] [-t <time>]"
+        echo "      pid  - the pid of interest"
+        echo "      freq - how often to take stackshots (unit: hz, default: 50)"
+        echo "      time - how long to take stackshots (unit: second, default: 30)"
+        exit 0
+        ;;
+    p )
+        pid=$OPTARG
+        ;;
+    f )
+        freq=$OPTARG
+        ;;
+    t )
+        time=$OPTARG
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+echo $pid
+
+if [[ "$pid" == "" ]]; then $0 -h; exit 0; fi
+
+freq=${freq:-50}
+time=${time:-30}
+
+
+
+function process_stackshots()
+{
+    if [[ -f stackshots-$pid.out ]] ; then
+        stackshots=`cat stackshots-$pid.out`
+        echo $stackshots
+        mkdir -p ${stackshots%.*}
+        $SCRIPTDIR/foldstackshots.sh $stackshots
+    fi
+}
+
+function ctrl_c() {
+    if [[ -f stackshots.pid ]]; then
+        trap INT
+        sleep 1
+        process_stackshots
+    fi
+}
+
+trap ctrl_c INT
+sudo -E $SCRIPTDIR/stackshots.lua $pid -f $freq -t $time
+process_stackshots
