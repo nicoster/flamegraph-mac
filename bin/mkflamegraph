@@ -1,8 +1,7 @@
 #!/bin/bash 
 
-SCRIPTDIR=$(dirname -- "$(readlink "$BASH_SOURCE" || echo $BASH_SOURCE)")
-# echo SCRIPTDIR: $SCRIPTDIR
-
+RELATIVE_DIR=$(dirname -- "$(readlink "$BASH_SOURCE" || echo $BASH_SOURCE)")
+SCRIPTDIR=$(cd $RELATIVE_DIR && echo $(pwd -P))
 
 while getopts ":p:f:t:h" opt; do
   case ${opt} in
