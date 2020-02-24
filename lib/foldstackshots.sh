@@ -1,7 +1,7 @@
 #!/bin/bash 
 
-SCRIPTDIR=$(dirname -- "$(readlink "$BASH_SOURCE" || echo $BASH_SOURCE)")
-# echo BASH_SOURCE: $BASH_SOURCE
+RELATIVE_DIR=$(dirname -- "$(readlink "$BASH_SOURCE" || echo $BASH_SOURCE)")
+SCRIPTDIR=$(cd $RELATIVE_DIR && echo $(pwd -P))
 # echo SCRIPTDIR: $SCRIPTDIR
 
 stackshots=$1
