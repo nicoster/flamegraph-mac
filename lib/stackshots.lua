@@ -1,8 +1,8 @@
 #!/usr/bin/env luajit
 
 local ffi = require 'ffi'
-local argparse = require "argparse"
-local ins = require('inspect')
+local argparse = require "lib.argparse"
+local ok, ins = pcall(require, 'inspect')
 
 
 ffi.cdef [[
