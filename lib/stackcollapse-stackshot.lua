@@ -1,7 +1,7 @@
 #!/usr/bin/env luajit
 
 local json = require "cjson"
-local ins = require "inspect"
+local ok, ins = pcall(require, 'inspect')
 
 local stackshots = {}
 local processid
