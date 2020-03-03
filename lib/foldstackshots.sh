@@ -27,4 +27,4 @@ function convert_svg()
 /usr/bin/python $SCRIPTDIR/kcdata.py --multiple $stackshots \
 | sed '1s/^{/\[{/; s/"lr": \([0-9]\{1,\}\)/"lr": "\1"/g; s/^}$/},/g; $s/},$/}\]/; ' > $basename/stackshots.json \
 && LUA_CPATH="$SCRIPTDIR/?.so;;" $SCRIPTDIR/stackcollapse-stackshot.lua $basename/stackshots.json | tee $basename/fold.result \
-&& convert_svgg
+&& convert_svg
