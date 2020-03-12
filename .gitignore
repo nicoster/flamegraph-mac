@@ -4,3 +4,4 @@ pid*
 *.json
 *.tar.gz
 REVISION
+homebrew-repo

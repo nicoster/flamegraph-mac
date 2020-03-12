@@ -15,7 +15,7 @@ SCRIPTDIR=$(script_dir)
 while getopts ":p:f:t:h" opt; do
   case ${opt} in
     h )
-        echo "Usage: mkflamegraph -p <pid> [-f <freq>] [-t <time>]"
+        echo "Usage: mkflame -p <pid> [-f <freq>] [-t <time>]"
         echo "      pid  - the pid of interest"
         echo "      freq - how often to take stackshots (unit: hz, default: 50)"
         echo "      time - how long to take stackshots (unit: second, default: 30)"
