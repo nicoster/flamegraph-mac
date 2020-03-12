@@ -18,7 +18,7 @@ brew:
 	cd homebrew*; \
 	echo `pwd`; \
 	./update-rb.sh; \
-	git diff && git add . && git ci -m 'update artifacts' && git ci
+	git diff && git add . && git ci -m 'update artifacts' && git push
 
 clean:
 	rm -rf pid* *.out
